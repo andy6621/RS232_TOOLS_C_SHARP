@@ -1,1 +1,9 @@
 D:\share\RS232_TOOLS_C_Sharp\RS232_TOOLS_C_Sharp\bin\Debug\RS232_TOOLS_C_Sharp.exe.config
+D:\share\RS232_TOOLS_C_SHARP\RS232_TOOLS_C_Sharp\bin\Debug\RS232_TOOLS_C_Sharp.exe
+D:\share\RS232_TOOLS_C_SHARP\RS232_TOOLS_C_Sharp\bin\Debug\RS232_TOOLS_C_Sharp.pdb
+D:\share\RS232_TOOLS_C_SHARP\RS232_TOOLS_C_Sharp\obj\Debug\RS232_TOOLS_C_Sharp.csprojResolveAssemblyReference.cache
+D:\share\RS232_TOOLS_C_SHARP\RS232_TOOLS_C_Sharp\obj\Debug\RS232_TOOLS_C_Sharp.Form1.resources
+D:\share\RS232_TOOLS_C_SHARP\RS232_TOOLS_C_Sharp\obj\Debug\RS232_TOOLS_C_Sharp.Properties.Resources.resources
+D:\share\RS232_TOOLS_C_SHARP\RS232_TOOLS_C_Sharp\obj\Debug\RS232_TOOLS_C_Sharp.csproj.GenerateResource.Cache
+D:\share\RS232_TOOLS_C_SHARP\RS232_TOOLS_C_Sharp\obj\Debug\RS232_TOOLS_C_Sharp.exe
+D:\share\RS232_TOOLS_C_SHARP\RS232_TOOLS_C_Sharp\obj\Debug\RS232_TOOLS_C_Sharp.pdb
