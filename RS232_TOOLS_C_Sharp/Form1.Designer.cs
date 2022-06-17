@@ -57,6 +57,7 @@
             this.cboChipID = new System.Windows.Forms.ComboBox();
             this.btnReadRegister = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.txtI2CAddr2 = new System.Windows.Forms.TextBox();
             this.btnOpenFile = new System.Windows.Forms.Button();
             this.btnSaveFile = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
@@ -360,9 +361,9 @@
             this.lblGetTime = new System.Windows.Forms.Label();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.txtI2CAddr2 = new System.Windows.Forms.TextBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.btnREGWriteALL = new System.Windows.Forms.Button();
             this.gprMainPage.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -686,6 +687,7 @@
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage2.Controls.Add(this.btnREGWriteALL);
             this.tabPage2.Controls.Add(this.txtI2CAddr2);
             this.tabPage2.Controls.Add(this.btnOpenFile);
             this.tabPage2.Controls.Add(this.btnSaveFile);
@@ -985,6 +987,14 @@
             this.tabPage2.Size = new System.Drawing.Size(498, 594);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "暫存器";
+            // 
+            // txtI2CAddr2
+            // 
+            this.txtI2CAddr2.Font = new System.Drawing.Font("微軟正黑體", 12F);
+            this.txtI2CAddr2.Location = new System.Drawing.Point(12, 547);
+            this.txtI2CAddr2.Name = "txtI2CAddr2";
+            this.txtI2CAddr2.Size = new System.Drawing.Size(50, 29);
+            this.txtI2CAddr2.TabIndex = 6;
             // 
             // btnOpenFile
             // 
@@ -4535,14 +4545,6 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // txtI2CAddr2
-            // 
-            this.txtI2CAddr2.Font = new System.Drawing.Font("微軟正黑體", 12F);
-            this.txtI2CAddr2.Location = new System.Drawing.Point(12, 547);
-            this.txtI2CAddr2.Name = "txtI2CAddr2";
-            this.txtI2CAddr2.Size = new System.Drawing.Size(50, 29);
-            this.txtI2CAddr2.TabIndex = 6;
-            // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -4559,6 +4561,16 @@
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(170, 20);
             this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+            // 
+            // btnREGWriteALL
+            // 
+            this.btnREGWriteALL.Location = new System.Drawing.Point(234, 545);
+            this.btnREGWriteALL.Name = "btnREGWriteALL";
+            this.btnREGWriteALL.Size = new System.Drawing.Size(75, 36);
+            this.btnREGWriteALL.TabIndex = 7;
+            this.btnREGWriteALL.Text = "寫入";
+            this.btnREGWriteALL.UseVisualStyleBackColor = true;
+            this.btnREGWriteALL.Click += new System.EventHandler(this.btnREGWriteALL_Click);
             // 
             // Form1
             // 
@@ -4933,6 +4945,7 @@
         private System.Windows.Forms.TextBox txtI2CAddr2;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.Button btnREGWriteALL;
     }
 }
 
