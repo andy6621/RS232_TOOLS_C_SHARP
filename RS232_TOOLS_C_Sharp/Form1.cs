@@ -28,7 +28,13 @@ namespace RS232_TOOLS_C_Sharp
     public partial class Form1 : Form
     {
         string strTEMP = "";
-          
+ 
+    //Dump 設定
+    bool CMDR_Action = false  ;
+    int Dump_Start=0;
+    int Dump_End=0;
+    int Dump_Loop=0;
+   
      //   SerialPort serialPort1 = new SerialPort();
         delegate void SetTextCallback(string text);
 
@@ -67,6 +73,24 @@ namespace RS232_TOOLS_C_Sharp
 
         private void ReceiveData()
         {
+        TextBox[] txtREG = new TextBox[] { 
+     txtREG00, txtREG01, txtREG02, txtREG03, txtREG04, txtREG05, txtREG06, txtREG07, txtREG08, txtREG09, txtREG0A, txtREG0B, txtREG0C, txtREG0D, txtREG0E, txtREG0F,  
+     txtREG10, txtREG11, txtREG12, txtREG13, txtREG14, txtREG15, txtREG16, txtREG17, txtREG18, txtREG19, txtREG1A, txtREG1B, txtREG1C, txtREG1D, txtREG1E, txtREG1F, 
+     txtREG20, txtREG21, txtREG22, txtREG23, txtREG24, txtREG25, txtREG26, txtREG27, txtREG28, txtREG29, txtREG2A, txtREG2B, txtREG2C, txtREG2D, txtREG2E, txtREG2F, 
+     txtREG30, txtREG31, txtREG32, txtREG33, txtREG34, txtREG35, txtREG36, txtREG37, txtREG38, txtREG39, txtREG3A, txtREG3B, txtREG3C, txtREG3D, txtREG3E, txtREG3F, 
+     txtREG40, txtREG41, txtREG42, txtREG43, txtREG44, txtREG45, txtREG46, txtREG47, txtREG48, txtREG49, txtREG4A, txtREG4B, txtREG4C, txtREG4D, txtREG4E, txtREG4F, 
+     txtREG50, txtREG51, txtREG52, txtREG53, txtREG54, txtREG55, txtREG56, txtREG57, txtREG58, txtREG59, txtREG5A, txtREG5B, txtREG5C, txtREG5D, txtREG5E, txtREG5F, 
+     txtREG60, txtREG61, txtREG62, txtREG63, txtREG64, txtREG65, txtREG66, txtREG67, txtREG68, txtREG69, txtREG6A, txtREG6B, txtREG6C, txtREG6D, txtREG6E, txtREG6F, 
+     txtREG70, txtREG71, txtREG72, txtREG73, txtREG74, txtREG75, txtREG76, txtREG77, txtREG78, txtREG79, txtREG7A, txtREG7B, txtREG7C, txtREG7D, txtREG7E, txtREG7F, 
+     txtREG80, txtREG81, txtREG82, txtREG83, txtREG84, txtREG85, txtREG86, txtREG87, txtREG88, txtREG89, txtREG8A, txtREG8B, txtREG8C, txtREG8D, txtREG8E, txtREG8F, 
+     txtREG90, txtREG91, txtREG92, txtREG93, txtREG94, txtREG95, txtREG96, txtREG97, txtREG98, txtREG99, txtREG9A, txtREG9B, txtREG9C, txtREG9D, txtREG9E, txtREG9F, 
+     txtREGA0, txtREGA1, txtREGA2, txtREGA3, txtREGA4, txtREGA5, txtREGA6, txtREGA7, txtREGA8, txtREGA9, txtREGAA, txtREGAB, txtREGAC, txtREGAD, txtREGAE, txtREGAF, 
+     txtREGB0, txtREGB1, txtREGB2, txtREGB3, txtREGB4, txtREGB5, txtREGB6, txtREGB7, txtREGB8, txtREGB9, txtREGBA, txtREGBB, txtREGBC, txtREGBD, txtREGBE, txtREGBF, 
+     txtREGC0, txtREGC1, txtREGC2, txtREGC3, txtREGC4, txtREGC5, txtREGC6, txtREGC7, txtREGC8, txtREGC9, txtREGCA, txtREGCB, txtREGCC, txtREGCD, txtREGCE, txtREGCF, 
+     txtREGD0, txtREGD1, txtREGD2, txtREGD3, txtREGD4, txtREGD5, txtREGD6, txtREGD7, txtREGD8, txtREGD9, txtREGDA, txtREGDB, txtREGDC, txtREGDD, txtREGDE, txtREGDF, 
+     txtREGE0, txtREGE1, txtREGE2, txtREGE3, txtREGE4, txtREGE5, txtREGE6, txtREGE7, txtREGE8, txtREGE9, txtREGEA, txtREGEB, txtREGEC, txtREGED, txtREGEE, txtREGEF, 
+     txtREGF0, txtREGF1, txtREGF2, txtREGF3, txtREGF4, txtREGF5, txtREGF6, txtREGF7, txtREGF8, txtREGF9, txtREGFA, txtREGFB, txtREGFC, txtREGFD, txtREGFE, txtREGFF};      
+
             int GetValue;
             int k = serialPort1.BytesToRead;// -2;
             //if(k>0)
@@ -137,6 +161,36 @@ namespace RS232_TOOLS_C_Sharp
                         txtReadREGData.Text = rtfMessage2.Text.Substring(rtfMessage2.Text.IndexOf("STX") + 5 , 2);
                         txtWriteREGAddr.Text = txtReadREGAddr.Text;
                         txtWriteREGData.Text = txtReadREGData.Text;
+
+                            ///dump 處理程序
+                        if (CMDR_Action == true)  
+                            {
+                           // PRINT("Get Dump addr=" + txtReadREGAddr.Text + ",data=" + txtReadREGData.Text);
+                            if (txtREG[Int32.Parse(txtReadREGAddr.Text , System.Globalization.NumberStyles.HexNumber)].Text != txtReadREGData.Text)
+                                txtREG[Int32.Parse(txtReadREGAddr.Text , System.Globalization.NumberStyles.HexNumber)].ForeColor  = Color.Red;
+                            else
+                                txtREG[Int32.Parse(txtReadREGAddr.Text , System.Globalization.NumberStyles.HexNumber)].ForeColor = Color.Empty;
+
+                            txtREG[Int32.Parse(txtReadREGAddr.Text , System.Globalization.NumberStyles.HexNumber)].Text = txtReadREGData.Text;
+
+                            if (Dump_End > Dump_Loop)
+                                {
+                                //timer3.Interval = 5000; //dump處理程序預估5秒鐘
+                                Dump_Loop++;
+                                txtReadREGAddr.Text = Convert.ToString(Dump_Loop , 16).ToUpper();//轉成大寫16進位字串
+
+                                if (txtReadREGAddr.Text.Length == 1)
+                                    txtReadREGAddr.Text = "0" + txtReadREGAddr.Text;
+                                
+                                rtfMessage.Text = "";
+                                SendCMDtoPort(Commands.CMDR);
+                                }
+                            else
+                                {
+                                CMDR_Action = false;
+                                PRINT("Dump 程序結束..");
+                                }
+                            }
                          //rtfMessageTemp.Text = "";
                         //PRINT("STX address=" + strTEMP.IndexOf("STX"));                        
                        // strTEMP.Remove(0 , strTEMP.IndexOf("STX")+13);
@@ -212,6 +266,8 @@ namespace RS232_TOOLS_C_Sharp
             cboComPort.SelectedIndex = 0;
             cboBaudRate.SelectedIndex = 0;
             cboSecond.SelectedIndex = 0;
+            txtI2CAddr2.Text = txtI2CAddr.Text;
+            toolStripStatusLabel1 .Text = System.Windows.Forms.Application.StartupPath;
             StartUp();
         }
 
@@ -345,7 +401,7 @@ namespace RS232_TOOLS_C_Sharp
 
             try
             {
-                rtfMessage.AppendText(str + "\n");
+                rtfMessage.AppendText( "\n" + str + "\n");
             }
             catch (Exception)
             {
@@ -353,6 +409,18 @@ namespace RS232_TOOLS_C_Sharp
 
         }
 
+        void PRINT2(string str)
+            {
+
+            try
+                {
+                rtfMessage.AppendText( str + "\n");
+                }
+            catch (Exception)
+                {
+                }
+
+            }
         private void btnComPortConnet_Click(object sender, EventArgs e)
         {
 
@@ -474,6 +542,7 @@ namespace RS232_TOOLS_C_Sharp
             {
             DateTime localDate = DateTime.Now;
             lblTimeClock.Text = localDate.ToString();// DateTime.Now.ToString("HH:mm:ss");
+            //lblGetTime.Text = localDate.AddSeconds(15).ToString() ; 
 
             if (timer2.Enabled == true)
                 {
@@ -481,6 +550,15 @@ namespace RS232_TOOLS_C_Sharp
                     btnSendCMD.BackColor = Color.Empty;
                 else
                     btnSendCMD.BackColor = Color.Red;
+                }
+
+            if (lblGetTime.Text == localDate.AddSeconds(0).ToString("HH:mm:ss"))
+                {
+                   if (CMDR_Action == true)
+                    {
+                    PRINT("Dump處理程序沒有完成..");
+                    CMDR_Action = false;
+                    }
                 }
 
             }
@@ -533,13 +611,13 @@ namespace RS232_TOOLS_C_Sharp
         private void cboChipID_SelectedIndexChanged(object sender , EventArgs e)
             {
             if (cboChipID.SelectedIndex == 0)
-                txtI2CAddr.Text = "40";
+                txtI2CAddr.Text = txtI2CAddr2.Text = "40";
             else if (cboChipID.SelectedIndex == 1)
-                txtI2CAddr.Text = "88";
+                txtI2CAddr.Text = txtI2CAddr2.Text = "88";
             else if (cboChipID.SelectedIndex == 2)
-                txtI2CAddr.Text = "A0";
+                txtI2CAddr.Text = txtI2CAddr2.Text = "A0";
             else if (cboChipID.SelectedIndex == 3)
-                txtI2CAddr.Text = "12";
+                txtI2CAddr.Text = txtI2CAddr2.Text = "12";
 
             }
 
@@ -684,12 +762,14 @@ namespace RS232_TOOLS_C_Sharp
             {
             TextBox txtbox = (TextBox)sender;
             lblColorChange(txtbox , true);
+            txtbox.BackColor = Color.Yellow; 
             }
 
         private void txtREG00_MouseLeave(object sender , EventArgs e)
             {
             TextBox txtbox = (TextBox)sender;
             lblColorChange(txtbox , false);
+            txtbox.BackColor = Color.Empty; 
             }
 
         private void lblColorChange(TextBox  txtbox, bool action)
@@ -913,6 +993,237 @@ namespace RS232_TOOLS_C_Sharp
             else
                 lblREGAddr.Text = "";
             }
+
+        private void btnREGReadALL_Click(object sender , EventArgs e)
+            {
+            DateTime localDate = DateTime.Now;
+
+            rtfMessage.Text = "";
+            CMDR_Action = true;
+            Dump_Start = 0; //dump 開始位置
+            txtReadREGAddr.Text = Convert.ToString(Dump_Start , 16).ToUpper();//轉成大寫16進位字串
+              if(txtReadREGAddr.Text.Length==1)
+                  txtReadREGAddr.Text = "0" + txtReadREGAddr.Text;
+            Dump_End = 0xFF;   //dump 結束位置 
+            Dump_Loop = Dump_Start;  //dump 開始迴圈
+
+            SendCMDtoPort(Commands.CMDR);
+            //timer3.Interval = 5000; //dump處理程序預估5秒鐘
+            //timer3.Enabled = true;
+           // lblGetTime.Text = TimeOfDay.AddSeconds(10).ToString("hh:mm:ss");
+
+         
+           // lblTimeClock.Text = localDate.ToString();// DateTime.Now.ToString("HH:mm:ss");
+            //dump處理程序預估15秒鐘
+             lblGetTime.Text = localDate.AddSeconds(15).ToString("hh:mm:ss"); 
+
+            }
+
+        private void timer3_Tick(object sender , EventArgs e)
+            {
+            timer3.Enabled = false;
+
+            if (CMDR_Action == true)
+                {
+                PRINT("Dump處理程序沒有完成..");
+                CMDR_Action = false;
+                }
+            }
+
+        private void button1_Click(object sender , EventArgs e)
+            {
+            TextBox[] txtREG = new TextBox[] { 
+     txtREG00, txtREG01, txtREG02, txtREG03, txtREG04, txtREG05, txtREG06, txtREG07, txtREG08, txtREG09, txtREG0A, txtREG0B, txtREG0C, txtREG0D, txtREG0E, txtREG0F,  
+     txtREG10, txtREG11, txtREG12, txtREG13, txtREG14, txtREG15, txtREG16, txtREG17, txtREG18, txtREG19, txtREG1A, txtREG1B, txtREG1C, txtREG1D, txtREG1E, txtREG1F, 
+     txtREG20, txtREG21, txtREG22, txtREG23, txtREG24, txtREG25, txtREG26, txtREG27, txtREG28, txtREG29, txtREG2A, txtREG2B, txtREG2C, txtREG2D, txtREG2E, txtREG2F, 
+     txtREG30, txtREG31, txtREG32, txtREG33, txtREG34, txtREG35, txtREG36, txtREG37, txtREG38, txtREG39, txtREG3A, txtREG3B, txtREG3C, txtREG3D, txtREG3E, txtREG3F, 
+     txtREG40, txtREG41, txtREG42, txtREG43, txtREG44, txtREG45, txtREG46, txtREG47, txtREG48, txtREG49, txtREG4A, txtREG4B, txtREG4C, txtREG4D, txtREG4E, txtREG4F, 
+     txtREG50, txtREG51, txtREG52, txtREG53, txtREG54, txtREG55, txtREG56, txtREG57, txtREG58, txtREG59, txtREG5A, txtREG5B, txtREG5C, txtREG5D, txtREG5E, txtREG5F, 
+     txtREG60, txtREG61, txtREG62, txtREG63, txtREG64, txtREG65, txtREG66, txtREG67, txtREG68, txtREG69, txtREG6A, txtREG6B, txtREG6C, txtREG6D, txtREG6E, txtREG6F, 
+     txtREG70, txtREG71, txtREG72, txtREG73, txtREG74, txtREG75, txtREG76, txtREG77, txtREG78, txtREG79, txtREG7A, txtREG7B, txtREG7C, txtREG7D, txtREG7E, txtREG7F, 
+     txtREG80, txtREG81, txtREG82, txtREG83, txtREG84, txtREG85, txtREG86, txtREG87, txtREG88, txtREG89, txtREG8A, txtREG8B, txtREG8C, txtREG8D, txtREG8E, txtREG8F, 
+     txtREG90, txtREG91, txtREG92, txtREG93, txtREG94, txtREG95, txtREG96, txtREG97, txtREG98, txtREG99, txtREG9A, txtREG9B, txtREG9C, txtREG9D, txtREG9E, txtREG9F, 
+     txtREGA0, txtREGA1, txtREGA2, txtREGA3, txtREGA4, txtREGA5, txtREGA6, txtREGA7, txtREGA8, txtREGA9, txtREGAA, txtREGAB, txtREGAC, txtREGAD, txtREGAE, txtREGAF, 
+     txtREGB0, txtREGB1, txtREGB2, txtREGB3, txtREGB4, txtREGB5, txtREGB6, txtREGB7, txtREGB8, txtREGB9, txtREGBA, txtREGBB, txtREGBC, txtREGBD, txtREGBE, txtREGBF, 
+     txtREGC0, txtREGC1, txtREGC2, txtREGC3, txtREGC4, txtREGC5, txtREGC6, txtREGC7, txtREGC8, txtREGC9, txtREGCA, txtREGCB, txtREGCC, txtREGCD, txtREGCE, txtREGCF, 
+     txtREGD0, txtREGD1, txtREGD2, txtREGD3, txtREGD4, txtREGD5, txtREGD6, txtREGD7, txtREGD8, txtREGD9, txtREGDA, txtREGDB, txtREGDC, txtREGDD, txtREGDE, txtREGDF, 
+     txtREGE0, txtREGE1, txtREGE2, txtREGE3, txtREGE4, txtREGE5, txtREGE6, txtREGE7, txtREGE8, txtREGE9, txtREGEA, txtREGEB, txtREGEC, txtREGED, txtREGEE, txtREGEF, 
+     txtREGF0, txtREGF1, txtREGF2, txtREGF3, txtREGF4, txtREGF5, txtREGF6, txtREGF7, txtREGF8, txtREGF9, txtREGFA, txtREGFB, txtREGFC, txtREGFD, txtREGFE, txtREGFF};
+            for (int i = 0 ; i <= 255 ; i++)
+                {
+                txtREG[i].Text = "00";
+                txtREG[i].ForeColor = Color.Empty;
+                }
+            }
+
+        private void btnSaveFile_Click(object sender , EventArgs e)
+            {
+            TextBox[] txtREG = new TextBox[] { 
+     txtREG00, txtREG01, txtREG02, txtREG03, txtREG04, txtREG05, txtREG06, txtREG07, txtREG08, txtREG09, txtREG0A, txtREG0B, txtREG0C, txtREG0D, txtREG0E, txtREG0F,  
+     txtREG10, txtREG11, txtREG12, txtREG13, txtREG14, txtREG15, txtREG16, txtREG17, txtREG18, txtREG19, txtREG1A, txtREG1B, txtREG1C, txtREG1D, txtREG1E, txtREG1F, 
+     txtREG20, txtREG21, txtREG22, txtREG23, txtREG24, txtREG25, txtREG26, txtREG27, txtREG28, txtREG29, txtREG2A, txtREG2B, txtREG2C, txtREG2D, txtREG2E, txtREG2F, 
+     txtREG30, txtREG31, txtREG32, txtREG33, txtREG34, txtREG35, txtREG36, txtREG37, txtREG38, txtREG39, txtREG3A, txtREG3B, txtREG3C, txtREG3D, txtREG3E, txtREG3F, 
+     txtREG40, txtREG41, txtREG42, txtREG43, txtREG44, txtREG45, txtREG46, txtREG47, txtREG48, txtREG49, txtREG4A, txtREG4B, txtREG4C, txtREG4D, txtREG4E, txtREG4F, 
+     txtREG50, txtREG51, txtREG52, txtREG53, txtREG54, txtREG55, txtREG56, txtREG57, txtREG58, txtREG59, txtREG5A, txtREG5B, txtREG5C, txtREG5D, txtREG5E, txtREG5F, 
+     txtREG60, txtREG61, txtREG62, txtREG63, txtREG64, txtREG65, txtREG66, txtREG67, txtREG68, txtREG69, txtREG6A, txtREG6B, txtREG6C, txtREG6D, txtREG6E, txtREG6F, 
+     txtREG70, txtREG71, txtREG72, txtREG73, txtREG74, txtREG75, txtREG76, txtREG77, txtREG78, txtREG79, txtREG7A, txtREG7B, txtREG7C, txtREG7D, txtREG7E, txtREG7F, 
+     txtREG80, txtREG81, txtREG82, txtREG83, txtREG84, txtREG85, txtREG86, txtREG87, txtREG88, txtREG89, txtREG8A, txtREG8B, txtREG8C, txtREG8D, txtREG8E, txtREG8F, 
+     txtREG90, txtREG91, txtREG92, txtREG93, txtREG94, txtREG95, txtREG96, txtREG97, txtREG98, txtREG99, txtREG9A, txtREG9B, txtREG9C, txtREG9D, txtREG9E, txtREG9F, 
+     txtREGA0, txtREGA1, txtREGA2, txtREGA3, txtREGA4, txtREGA5, txtREGA6, txtREGA7, txtREGA8, txtREGA9, txtREGAA, txtREGAB, txtREGAC, txtREGAD, txtREGAE, txtREGAF, 
+     txtREGB0, txtREGB1, txtREGB2, txtREGB3, txtREGB4, txtREGB5, txtREGB6, txtREGB7, txtREGB8, txtREGB9, txtREGBA, txtREGBB, txtREGBC, txtREGBD, txtREGBE, txtREGBF, 
+     txtREGC0, txtREGC1, txtREGC2, txtREGC3, txtREGC4, txtREGC5, txtREGC6, txtREGC7, txtREGC8, txtREGC9, txtREGCA, txtREGCB, txtREGCC, txtREGCD, txtREGCE, txtREGCF, 
+     txtREGD0, txtREGD1, txtREGD2, txtREGD3, txtREGD4, txtREGD5, txtREGD6, txtREGD7, txtREGD8, txtREGD9, txtREGDA, txtREGDB, txtREGDC, txtREGDD, txtREGDE, txtREGDF, 
+     txtREGE0, txtREGE1, txtREGE2, txtREGE3, txtREGE4, txtREGE5, txtREGE6, txtREGE7, txtREGE8, txtREGE9, txtREGEA, txtREGEB, txtREGEC, txtREGED, txtREGEE, txtREGEF, 
+     txtREGF0, txtREGF1, txtREGF2, txtREGF3, txtREGF4, txtREGF5, txtREGF6, txtREGF7, txtREGF8, txtREGF9, txtREGFA, txtREGFB, txtREGFC, txtREGFD, txtREGFE, txtREGFF};
+
+            DateTime localDate = DateTime.Now;
+            string AddrTemp = "";
+            string path = System.Windows.Forms.Application.StartupPath + "/dump.txt";
+            //FileStream fs = new FileStream(path  , FileMode.Create);
+            ////獲得位元組陣列
+            //byte[] data = System.Text.Encoding.Default.GetBytes("Hello World!");
+            ////開始寫入
+            //fs.Write(data , 0 , data.Length);
+
+            //if (serialPort1.IsOpen == true)
+            //    {
+            //    fs.Write(serialPort1.na );
+            //    }
+
+            ////清空緩衝區、關閉流
+            //fs.Flush();
+            //fs.Close();
+
+            FileStream fs = new FileStream(path , FileMode.Create);
+            StreamWriter sw = new StreamWriter(fs);
+            //開始寫入
+            sw.Write(localDate.ToString() + "\r");
+
+            for (int i = 0 ; i <= 255 ; i++)
+                {
+                AddrTemp = Convert.ToString(i , 16).ToUpper();
+                if (AddrTemp.Length == 1)
+                    AddrTemp = "0" + AddrTemp;
+                sw.Write(txtI2CAddr.Text + "," + AddrTemp + "," + txtREG[i].Text + "\r");
+                }
+
+            //    if (serialPort1.IsOpen == true)
+            //        sw.Write(serialPort1.PortName + "\r");
+
+            //if (chkRepeatCMD.Checked == true)
+            //    sw.Write("chkRepeatCMD.Checked=true" + "\r");
+
+
+            //清空緩衝區
+            sw.Flush();
+            //關閉流
+            sw.Close();
+            fs.Close();
+
+            //saveFileDialog1.AddExtension = true;
+            //saveFileDialog1.InitialDirectory = Path.GetDirectoryName(strPartPath);
+
+            saveFileDialog1.Filter = "文字檔(*.txt)|*.txt|所有文件|*.*"; //存檔類型
+            saveFileDialog1.Title = "暫存器資料另存新檔";//標題
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+
+                string fileName = saveFileDialog1.FileName;
+
+                // string pathFile = "c://ere.txt"; //指定文件
+
+                File.Copy(path , fileName , true); //複製
+
+                toolStripStatusLabel1.Text = fileName;
+
+                MessageBox.Show("存檔成功!");
+
+                }
+
+            else
+                {
+
+                MessageBox.Show("存檔取消!");
+
+                }
+
+            //MessageBox.Show("存檔完畢");
+            }
+
+        private void btnOpenFile_Click(object sender , EventArgs e)
+            {
+
+            TextBox[] txtREG = new TextBox[] { 
+     txtREG00, txtREG01, txtREG02, txtREG03, txtREG04, txtREG05, txtREG06, txtREG07, txtREG08, txtREG09, txtREG0A, txtREG0B, txtREG0C, txtREG0D, txtREG0E, txtREG0F,  
+     txtREG10, txtREG11, txtREG12, txtREG13, txtREG14, txtREG15, txtREG16, txtREG17, txtREG18, txtREG19, txtREG1A, txtREG1B, txtREG1C, txtREG1D, txtREG1E, txtREG1F, 
+     txtREG20, txtREG21, txtREG22, txtREG23, txtREG24, txtREG25, txtREG26, txtREG27, txtREG28, txtREG29, txtREG2A, txtREG2B, txtREG2C, txtREG2D, txtREG2E, txtREG2F, 
+     txtREG30, txtREG31, txtREG32, txtREG33, txtREG34, txtREG35, txtREG36, txtREG37, txtREG38, txtREG39, txtREG3A, txtREG3B, txtREG3C, txtREG3D, txtREG3E, txtREG3F, 
+     txtREG40, txtREG41, txtREG42, txtREG43, txtREG44, txtREG45, txtREG46, txtREG47, txtREG48, txtREG49, txtREG4A, txtREG4B, txtREG4C, txtREG4D, txtREG4E, txtREG4F, 
+     txtREG50, txtREG51, txtREG52, txtREG53, txtREG54, txtREG55, txtREG56, txtREG57, txtREG58, txtREG59, txtREG5A, txtREG5B, txtREG5C, txtREG5D, txtREG5E, txtREG5F, 
+     txtREG60, txtREG61, txtREG62, txtREG63, txtREG64, txtREG65, txtREG66, txtREG67, txtREG68, txtREG69, txtREG6A, txtREG6B, txtREG6C, txtREG6D, txtREG6E, txtREG6F, 
+     txtREG70, txtREG71, txtREG72, txtREG73, txtREG74, txtREG75, txtREG76, txtREG77, txtREG78, txtREG79, txtREG7A, txtREG7B, txtREG7C, txtREG7D, txtREG7E, txtREG7F, 
+     txtREG80, txtREG81, txtREG82, txtREG83, txtREG84, txtREG85, txtREG86, txtREG87, txtREG88, txtREG89, txtREG8A, txtREG8B, txtREG8C, txtREG8D, txtREG8E, txtREG8F, 
+     txtREG90, txtREG91, txtREG92, txtREG93, txtREG94, txtREG95, txtREG96, txtREG97, txtREG98, txtREG99, txtREG9A, txtREG9B, txtREG9C, txtREG9D, txtREG9E, txtREG9F, 
+     txtREGA0, txtREGA1, txtREGA2, txtREGA3, txtREGA4, txtREGA5, txtREGA6, txtREGA7, txtREGA8, txtREGA9, txtREGAA, txtREGAB, txtREGAC, txtREGAD, txtREGAE, txtREGAF, 
+     txtREGB0, txtREGB1, txtREGB2, txtREGB3, txtREGB4, txtREGB5, txtREGB6, txtREGB7, txtREGB8, txtREGB9, txtREGBA, txtREGBB, txtREGBC, txtREGBD, txtREGBE, txtREGBF, 
+     txtREGC0, txtREGC1, txtREGC2, txtREGC3, txtREGC4, txtREGC5, txtREGC6, txtREGC7, txtREGC8, txtREGC9, txtREGCA, txtREGCB, txtREGCC, txtREGCD, txtREGCE, txtREGCF, 
+     txtREGD0, txtREGD1, txtREGD2, txtREGD3, txtREGD4, txtREGD5, txtREGD6, txtREGD7, txtREGD8, txtREGD9, txtREGDA, txtREGDB, txtREGDC, txtREGDD, txtREGDE, txtREGDF, 
+     txtREGE0, txtREGE1, txtREGE2, txtREGE3, txtREGE4, txtREGE5, txtREGE6, txtREGE7, txtREGE8, txtREGE9, txtREGEA, txtREGEB, txtREGEC, txtREGED, txtREGEE, txtREGEF, 
+     txtREGF0, txtREGF1, txtREGF2, txtREGF3, txtREGF4, txtREGF5, txtREGF6, txtREGF7, txtREGF8, txtREGF9, txtREGFA, txtREGFB, txtREGFC, txtREGFD, txtREGFE, txtREGFF};
+
+            openFileDialog1.Title = "檔案開啟";
+            openFileDialog1.InitialDirectory = System.Windows.Forms.Application.StartupPath  ;
+            openFileDialog1.Filter = "文字檔案(*.txt)|*.txt";
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+
+                string str = "";
+                FileInfo f = new FileInfo(openFileDialog1.FileName);
+                StreamReader sr = f.OpenText();
+                while (sr.Peek() >= 0)
+                    {
+                   // txtReadREGData.Text = rtfMessage2.Text.Substring(rtfMessage2.Text.IndexOf("STX") + 5 , 2);
+                    str = sr.ReadLine();
+                    //(str.Contains("COM")
+                    //Convert.ToInt32("aa", 16)
+                    if (str.Contains(txtI2CAddr.Text)==true )
+                        {
+                      //txtREG[Int32.Parse(str.Substring(3, 2) , System.Globalization.NumberStyles.HexNumber)].Text = str.Substring(str.IndexOf(txtI2CAddr.Text) + 7 , 2);
+                        if (txtREG[Convert.ToInt32(str.Substring(3 , 2) , 16)].Text != str.Substring(6 , 2))
+                            {
+                            txtREG[Convert.ToInt32(str.Substring(3 , 2) , 16)].ForeColor = Color.Red;
+                            txtREG[Convert.ToInt32(str.Substring(3 , 2) , 16)].Text = str.Substring(6 , 2);
+                            }
+                        }
+                   // PRINT(str);
+             
+                  
+
+                    }
+
+                toolStripStatusLabel1.Text = openFileDialog1.FileName;
+
+                sr.Close();
+
+                MessageBox.Show("檔案開啟成功!");
+                }
+            else
+                {
+                MessageBox.Show("檔案開啟失敗!");
+                }
+
+            }
+
+  
+
+      
+
+      
+
+    
+
+      
 
       
 
