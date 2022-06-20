@@ -57,11 +57,13 @@
             this.cboChipID = new System.Windows.Forms.ComboBox();
             this.btnReadRegister = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.txtI2CAddr2 = new System.Windows.Forms.TextBox();
-            this.btnOpenFile = new System.Windows.Forms.Button();
-            this.btnSaveFile = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnREGWriteALL = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.btnREGReadALL = new System.Windows.Forms.Button();
+            this.btnOpenFile = new System.Windows.Forms.Button();
+            this.btnSaveFile = new System.Windows.Forms.Button();
+            this.txtI2CAddr2 = new System.Windows.Forms.TextBox();
             this.lbl_REG0F = new System.Windows.Forms.Label();
             this.lbl_REG07 = new System.Windows.Forms.Label();
             this.lbl_REG0E = new System.Windows.Forms.Label();
@@ -363,11 +365,11 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.btnREGWriteALL = new System.Windows.Forms.Button();
             this.gprMainPage.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -687,12 +689,8 @@
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPage2.Controls.Add(this.btnREGWriteALL);
+            this.tabPage2.Controls.Add(this.groupBox1);
             this.tabPage2.Controls.Add(this.txtI2CAddr2);
-            this.tabPage2.Controls.Add(this.btnOpenFile);
-            this.tabPage2.Controls.Add(this.btnSaveFile);
-            this.tabPage2.Controls.Add(this.button1);
-            this.tabPage2.Controls.Add(this.btnREGReadALL);
             this.tabPage2.Controls.Add(this.lbl_REG0F);
             this.tabPage2.Controls.Add(this.lbl_REG07);
             this.tabPage2.Controls.Add(this.lbl_REG0E);
@@ -988,38 +986,33 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "暫存器";
             // 
-            // txtI2CAddr2
+            // groupBox1
             // 
-            this.txtI2CAddr2.Font = new System.Drawing.Font("微軟正黑體", 12F);
-            this.txtI2CAddr2.Location = new System.Drawing.Point(12, 547);
-            this.txtI2CAddr2.Name = "txtI2CAddr2";
-            this.txtI2CAddr2.Size = new System.Drawing.Size(50, 29);
-            this.txtI2CAddr2.TabIndex = 6;
+            this.groupBox1.Controls.Add(this.btnREGWriteALL);
+            this.groupBox1.Controls.Add(this.button1);
+            this.groupBox1.Controls.Add(this.btnREGReadALL);
+            this.groupBox1.Controls.Add(this.btnOpenFile);
+            this.groupBox1.Controls.Add(this.btnSaveFile);
+            this.groupBox1.Location = new System.Drawing.Point(76, 529);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(416, 59);
+            this.groupBox1.TabIndex = 8;
+            this.groupBox1.TabStop = false;
             // 
-            // btnOpenFile
+            // btnREGWriteALL
             // 
-            this.btnOpenFile.Location = new System.Drawing.Point(375, 545);
-            this.btnOpenFile.Name = "btnOpenFile";
-            this.btnOpenFile.Size = new System.Drawing.Size(52, 36);
-            this.btnOpenFile.TabIndex = 5;
-            this.btnOpenFile.Text = "開檔";
-            this.btnOpenFile.UseVisualStyleBackColor = true;
-            this.btnOpenFile.Click += new System.EventHandler(this.btnOpenFile_Click);
-            // 
-            // btnSaveFile
-            // 
-            this.btnSaveFile.Location = new System.Drawing.Point(440, 545);
-            this.btnSaveFile.Name = "btnSaveFile";
-            this.btnSaveFile.Size = new System.Drawing.Size(52, 36);
-            this.btnSaveFile.TabIndex = 4;
-            this.btnSaveFile.Text = "存檔";
-            this.btnSaveFile.UseVisualStyleBackColor = true;
-            this.btnSaveFile.Click += new System.EventHandler(this.btnSaveFile_Click);
+            this.btnREGWriteALL.Location = new System.Drawing.Point(144, 19);
+            this.btnREGWriteALL.Name = "btnREGWriteALL";
+            this.btnREGWriteALL.Size = new System.Drawing.Size(75, 36);
+            this.btnREGWriteALL.TabIndex = 7;
+            this.btnREGWriteALL.Text = "寫入";
+            this.btnREGWriteALL.UseVisualStyleBackColor = true;
+            this.btnREGWriteALL.Click += new System.EventHandler(this.btnREGWriteALL_Click);
             // 
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.button1.Location = new System.Drawing.Point(100, 544);
+            this.button1.Location = new System.Drawing.Point(10, 18);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(47, 36);
             this.button1.TabIndex = 3;
@@ -1029,13 +1022,42 @@
             // 
             // btnREGReadALL
             // 
-            this.btnREGReadALL.Location = new System.Drawing.Point(153, 544);
+            this.btnREGReadALL.Location = new System.Drawing.Point(63, 18);
             this.btnREGReadALL.Name = "btnREGReadALL";
             this.btnREGReadALL.Size = new System.Drawing.Size(75, 36);
             this.btnREGReadALL.TabIndex = 2;
             this.btnREGReadALL.Text = "讀取";
             this.btnREGReadALL.UseVisualStyleBackColor = true;
             this.btnREGReadALL.Click += new System.EventHandler(this.btnREGReadALL_Click);
+            // 
+            // btnOpenFile
+            // 
+            this.btnOpenFile.Location = new System.Drawing.Point(285, 19);
+            this.btnOpenFile.Name = "btnOpenFile";
+            this.btnOpenFile.Size = new System.Drawing.Size(52, 36);
+            this.btnOpenFile.TabIndex = 5;
+            this.btnOpenFile.Text = "開檔";
+            this.btnOpenFile.UseVisualStyleBackColor = true;
+            this.btnOpenFile.Click += new System.EventHandler(this.btnOpenFile_Click);
+            // 
+            // btnSaveFile
+            // 
+            this.btnSaveFile.Location = new System.Drawing.Point(350, 19);
+            this.btnSaveFile.Name = "btnSaveFile";
+            this.btnSaveFile.Size = new System.Drawing.Size(52, 36);
+            this.btnSaveFile.TabIndex = 4;
+            this.btnSaveFile.Text = "存檔";
+            this.btnSaveFile.UseVisualStyleBackColor = true;
+            this.btnSaveFile.Click += new System.EventHandler(this.btnSaveFile_Click);
+            // 
+            // txtI2CAddr2
+            // 
+            this.txtI2CAddr2.Font = new System.Drawing.Font("微軟正黑體", 12F);
+            this.txtI2CAddr2.Location = new System.Drawing.Point(12, 547);
+            this.txtI2CAddr2.Name = "txtI2CAddr2";
+            this.txtI2CAddr2.Size = new System.Drawing.Size(50, 29);
+            this.txtI2CAddr2.TabIndex = 6;
+            this.txtI2CAddr2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtI2CAddr2_KeyPress);
             // 
             // lbl_REG0F
             // 
@@ -4562,16 +4584,6 @@
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(170, 20);
             this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
             // 
-            // btnREGWriteALL
-            // 
-            this.btnREGWriteALL.Location = new System.Drawing.Point(234, 545);
-            this.btnREGWriteALL.Name = "btnREGWriteALL";
-            this.btnREGWriteALL.Size = new System.Drawing.Size(75, 36);
-            this.btnREGWriteALL.TabIndex = 7;
-            this.btnREGWriteALL.Text = "寫入";
-            this.btnREGWriteALL.UseVisualStyleBackColor = true;
-            this.btnREGWriteALL.Click += new System.EventHandler(this.btnREGWriteALL_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -4603,6 +4615,7 @@
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -4946,6 +4959,7 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.Button btnREGWriteALL;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }
 

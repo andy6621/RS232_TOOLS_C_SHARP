@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Ports;
 using System.IO;
+using System.Threading;
 
 namespace RS232_TOOLS_C_Sharp
 {
@@ -39,6 +40,14 @@ namespace RS232_TOOLS_C_Sharp
     int WriteREGALL_Start = 0;
     int WriteREGALL_End = 0;
     int WriteREGALL_Loop = 0;
+    
+    //DisConnect Flag
+    bool blnDisConnect_Flag  = false;
+
+    //btnFormExit Flag
+    bool btnFormExit_Flag = false;
+ 
+    //private Thread rs232ReadThread = null;
 
      //   SerialPort serialPort1 = new SerialPort();
         delegate void SetTextCallback(string text);
@@ -195,22 +204,25 @@ namespace RS232_TOOLS_C_Sharp
                                 {
                                 CMDR_Action = false;
                                 PRINT("Dump 程序結束..");
+                                if (blnDisConnect_Flag != true && btnFormExit_Flag!=true )
                                 lblGetTime.Text = "_";
+                                groupBox1.Enabled = true ;
+                                this.ControlBox = true;
                                 }
                             }
-                        else if (CMDW_Action==true )
+                        else if (CMDW_Action == true)
                             {
-                            if (WriteREGALL_End  > WriteREGALL_Loop  )
+                            if (WriteREGALL_End > WriteREGALL_Loop)
                                 {
                                 //timer3.Interval = 5000; //dump處理程序預估5秒鐘
-                                WriteREGALL_Loop++;                                                        
+                                WriteREGALL_Loop++;
 
                                 txtWriteREGAddr.Text = Convert.ToString(WriteREGALL_Loop , 16).ToUpper();//轉成大寫16進位字串
 
                                 if (txtWriteREGAddr.Text.Length == 1)
                                     txtWriteREGAddr.Text = "0" + txtWriteREGAddr.Text;
 
-                                txtWriteREGData.Text = txtREG[WriteREGALL_Loop].Text;                            
+                                txtWriteREGData.Text = txtREG[WriteREGALL_Loop].Text;
 
                                 rtfMessage.Text = "";
                                 SendCMDtoPort(Commands.CMDW);
@@ -219,9 +231,20 @@ namespace RS232_TOOLS_C_Sharp
                                 {
                                 CMDW_Action = false;
                                 PRINT("Write REG 程序結束..");
+                                if (blnDisConnect_Flag != true && btnFormExit_Flag != true)
                                 lblGetTime.Text = "_";
+                                groupBox1.Enabled = true;
+                                this.ControlBox = true;
                                 }
                             }
+                        //else
+                        //    {
+                        //    Thread.Sleep(1000); 
+                        //    if (blnDisConnect_Flag == true)
+                        //        {
+                       
+                        //        }
+                        //    }
                          //rtfMessageTemp.Text = "";
                         //PRINT("STX address=" + strTEMP.IndexOf("STX"));                        
                        // strTEMP.Remove(0 , strTEMP.IndexOf("STX")+13);
@@ -276,6 +299,9 @@ namespace RS232_TOOLS_C_Sharp
         }
         private void rtfMessageReset()
             {
+            if (rtfMessage.Text.Length > 2000)
+                rtfMessage.Text = "";
+
             rtfMessage.SelectionStart = rtfMessage.Text.Length;
             rtfMessage.ScrollToCaret();
 
@@ -384,25 +410,47 @@ namespace RS232_TOOLS_C_Sharp
         private void btnFormExit_Click(object sender, EventArgs e)
         {
         DateTime localDate = DateTime.Now;
-     
+             
        string path = System.Windows.Forms.Application.StartupPath + "/rs232.ini";
-        //FileStream fs = new FileStream(path  , FileMode.Create);
-        ////獲得位元組陣列
-        //byte[] data = System.Text.Encoding.Default.GetBytes("Hello World!");
-        ////開始寫入
-        //fs.Write(data , 0 , data.Length);
+  
+        if (CMDR_Action == true)
+            {
+            Dump_Loop = Dump_End;
+            txtReadREGAddr.Text = Convert.ToString(Dump_Loop , 16).ToUpper();//轉成大寫16進位字串
 
-        //if (serialPort1.IsOpen == true)
-        //    {
-        //    fs.Write(serialPort1.na );
-        //    }
+            if (txtReadREGAddr.Text.Length == 1)
+                txtReadREGAddr.Text = "0" + txtReadREGAddr.Text;
 
-        ////清空緩衝區、關閉流
-        //fs.Flush();
-        //fs.Close();
+            rtfMessage.Text = "";
+            SendCMDtoPort(Commands.CMDR);
+            btnFormExit_Flag = true;
+            REG_ALL_BackColor_Reset();
+            PRINT("btnFormExit_CMDR_Action=true");
+            lblGetTime.Text = localDate.AddSeconds(1).ToString("hh:mm:ss");
+            return;
+            }
+        else if (CMDW_Action == true)
+            {
+            WriteREGALL_Loop = WriteREGALL_End;
+            txtWriteREGAddr.Text = Convert.ToString(WriteREGALL_Loop , 16).ToUpper();//轉成大寫16進位字串
+
+            if (txtWriteREGAddr.Text.Length == 1)
+                txtWriteREGAddr.Text = "0" + txtWriteREGAddr.Text;
+
+            txtWriteREGData.Text = txtREGFF.Text;
+
+            rtfMessage.Text = "";
+            btnFormExit_Flag = true;
+            REG_ALL_BackColor_Reset();
+            PRINT("btnFormExit_CMDW_Action=true");
+            SendCMDtoPort(Commands.CMDW);
+            lblGetTime.Text = localDate.AddSeconds(1).ToString("hh:mm:ss");
+            return;
+            }
 
         FileStream fs = new FileStream(path , FileMode.Create);
         StreamWriter sw = new StreamWriter(fs);
+
         //開始寫入
         sw.Write(localDate.ToString() + "\r");
      
@@ -424,6 +472,8 @@ namespace RS232_TOOLS_C_Sharp
         btnSendCMD.BackColor = Color.Empty;
 
         serialPort1.Dispose();
+        serialPort1.Close();
+
         this.Close();
         }
 
@@ -497,20 +547,66 @@ namespace RS232_TOOLS_C_Sharp
   
         private void btnPortDisConnect_Click(object sender, EventArgs e)
         {
+         
+        DateTime localDate = DateTime.Now;
 
-            gprMainPage.Enabled = false;
+        if (CMDR_Action == true)
+            {
+            Dump_Loop = Dump_End;
+            txtReadREGAddr.Text = Convert.ToString(Dump_Loop , 16).ToUpper();//轉成大寫16進位字串
+
+            if (txtReadREGAddr.Text.Length == 1)
+                txtReadREGAddr.Text = "0" + txtReadREGAddr.Text;
+
+            rtfMessage.Text = "";
+            SendCMDtoPort(Commands.CMDR);
+            blnDisConnect_Flag = true;
+            REG_ALL_BackColor_Reset();
+            PRINT("DisConnect_CMDR_Action=true");
+            lblGetTime.Text = localDate.AddSeconds(1).ToString("hh:mm:ss");
+            return;
+            }
+        else if (CMDW_Action == true)
+            {
+            WriteREGALL_Loop = WriteREGALL_End;
+            txtWriteREGAddr.Text = Convert.ToString(WriteREGALL_Loop , 16).ToUpper();//轉成大寫16進位字串
+
+            if (txtWriteREGAddr.Text.Length == 1)
+                txtWriteREGAddr.Text = "0" + txtWriteREGAddr.Text;
+
+            txtWriteREGData.Text = txtREGFF.Text;
+
+            rtfMessage.Text = "";
+            blnDisConnect_Flag = true;
+            REG_ALL_BackColor_Reset();
+            PRINT("DisConnect_CMDW_Action=true");
+            SendCMDtoPort(Commands.CMDW);
+            lblGetTime.Text = localDate.AddSeconds(1).ToString("hh:mm:ss");
+            return;
+            }
+
+        CMDR_Action = false;
+        CMDW_Action = false;
+
+         
 
             try
             {
-                serialPort1.Dispose();
 
+            //serialPort1.DtrEnable = false;
+            //serialPort1.RtsEnable = false;
+            //serialPort1.DiscardInBuffer();
+            //serialPort1.DiscardOutBuffer();
+            serialPort1.Close();
+
+            //serialPort1.Dispose();
             }
             catch (Exception)
             {
                 ////MessageBox.Show("COM PORT 沒有開啟");
                 //rtfMessage.AppendText("COM PORT 沒有開啟\r\n");
             }
-
+       
             rtfMessage.Text = "";
             btnComPortConnet.Enabled = true;
             btnPortDisConnect.Enabled = false;
@@ -520,6 +616,7 @@ namespace RS232_TOOLS_C_Sharp
             btnSendCMD.Text = "傳送";
             btnSendCMD.BackColor = Color.Empty;
 
+            gprMainPage.Enabled = false;  
             //cboBaudRate.Enabled = false;
        }
 
@@ -583,18 +680,40 @@ namespace RS232_TOOLS_C_Sharp
                     btnSendCMD.BackColor = Color.Red;
                 }
 
-            if (lblGetTime.Text == localDate.AddSeconds(0).ToString("HH:mm:ss"))
+            if ((btnFormExit_Flag == true) && (lblGetTime.Text == localDate.AddSeconds(0).ToString("hh:mm:ss")))
                 {
-                   if (CMDR_Action == true)
+                btnFormExit_Flag = false;
+                btnFormExit.PerformClick();
+                PRINT("btnFormExit_Flag == true");
+                lblGetTime.Text = "_";
+                }
+            else if ((blnDisConnect_Flag == true) && (lblGetTime.Text == localDate.AddSeconds(0).ToString("hh:mm:ss")))
+                {
+                blnDisConnect_Flag = false;
+                //btnPortDisConnect_Click(new object() , new EventArgs());
+                btnPortDisConnect.PerformClick();
+                PRINT("blnDisConnect_Flag == true");
+                lblGetTime.Text = "_";
+                }
+            else if (lblGetTime.Text == localDate.AddSeconds(0).ToString("hh:mm:ss"))
+                {
+                if (CMDR_Action == true)
                     {
                     PRINT("Dump處理程序沒有完成..");
                     CMDR_Action = false;
+                    REG_ALL_BackColor_Reset();
+                    groupBox1.Enabled = true;
+                    this.ControlBox = true;
                     }
-                   else if (CMDW_Action == true)
-                       {
-                       PRINT("REG 寫入程序沒有完成..");
-                       CMDW_Action = false;
-                       }
+                else if (CMDW_Action == true)
+                    {
+                    PRINT("REG 寫入程序沒有完成..");
+                    CMDW_Action = false;
+                    REG_ALL_BackColor_Reset();
+                    groupBox1.Enabled = true;
+                    this.ControlBox = true;
+                    }
+                lblGetTime.Text = "_";
                 }
 
             }
@@ -796,16 +915,22 @@ namespace RS232_TOOLS_C_Sharp
 
         private void txtREG00_MouseHover(object sender , EventArgs e)
             {
-            TextBox txtbox = (TextBox)sender;
-            lblColorChange(txtbox , true);
-            txtbox.BackColor = Color.Yellow; 
+            if (CMDR_Action == false && CMDW_Action == false && gprMainPage.Enabled ==true)
+                {
+                TextBox txtbox = (TextBox)sender;
+                lblColorChange(txtbox , true);
+                txtbox.BackColor = Color.Yellow;
+                }
             }
 
         private void txtREG00_MouseLeave(object sender , EventArgs e)
             {
-            TextBox txtbox = (TextBox)sender;
-            lblColorChange(txtbox , false);
-            txtbox.BackColor = Color.Empty; 
+            if (CMDR_Action == false && CMDW_Action == false && gprMainPage.Enabled == true)
+                {
+                TextBox txtbox = (TextBox)sender;
+                lblColorChange(txtbox , false);
+                txtbox.BackColor = Color.Empty;
+                }
             }
 
         private void lblColorChange(TextBox  txtbox, bool action)
@@ -1044,7 +1169,8 @@ namespace RS232_TOOLS_C_Sharp
             Dump_Loop = Dump_Start;  //dump 開始迴圈
 
             REG_ALL_READY(Dump_Start , Dump_End, Color.GreenYellow );
-
+            groupBox1.Enabled = false;
+            this.ControlBox = false;
             SendCMDtoPort(Commands.CMDR);
             //timer3.Interval = 5000; //dump處理程序預估5秒鐘
             //timer3.Enabled = true;
@@ -1113,11 +1239,14 @@ namespace RS232_TOOLS_C_Sharp
      txtREGD0, txtREGD1, txtREGD2, txtREGD3, txtREGD4, txtREGD5, txtREGD6, txtREGD7, txtREGD8, txtREGD9, txtREGDA, txtREGDB, txtREGDC, txtREGDD, txtREGDE, txtREGDF, 
      txtREGE0, txtREGE1, txtREGE2, txtREGE3, txtREGE4, txtREGE5, txtREGE6, txtREGE7, txtREGE8, txtREGE9, txtREGEA, txtREGEB, txtREGEC, txtREGED, txtREGEE, txtREGEF, 
      txtREGF0, txtREGF1, txtREGF2, txtREGF3, txtREGF4, txtREGF5, txtREGF6, txtREGF7, txtREGF8, txtREGF9, txtREGFA, txtREGFB, txtREGFC, txtREGFD, txtREGFE, txtREGFF};
+            groupBox1.Enabled = false;
             for (int i = 0 ; i <= 255 ; i++)
                 {
                 txtREG[i].Text = "00";
                 txtREG[i].ForeColor = Color.Empty;
                 }
+            groupBox1.Enabled = true ;
+            this.ControlBox = true;
             }
 
         private void btnSaveFile_Click(object sender , EventArgs e)
@@ -1139,7 +1268,7 @@ namespace RS232_TOOLS_C_Sharp
      txtREGD0, txtREGD1, txtREGD2, txtREGD3, txtREGD4, txtREGD5, txtREGD6, txtREGD7, txtREGD8, txtREGD9, txtREGDA, txtREGDB, txtREGDC, txtREGDD, txtREGDE, txtREGDF, 
      txtREGE0, txtREGE1, txtREGE2, txtREGE3, txtREGE4, txtREGE5, txtREGE6, txtREGE7, txtREGE8, txtREGE9, txtREGEA, txtREGEB, txtREGEC, txtREGED, txtREGEE, txtREGEF, 
      txtREGF0, txtREGF1, txtREGF2, txtREGF3, txtREGF4, txtREGF5, txtREGF6, txtREGF7, txtREGF8, txtREGF9, txtREGFA, txtREGFB, txtREGFC, txtREGFD, txtREGFE, txtREGFF};
-
+            groupBox1.Enabled = false;
             DateTime localDate = DateTime.Now;
             string AddrTemp = "";
             string path = System.Windows.Forms.Application.StartupPath + "/dump.txt";
@@ -1213,6 +1342,8 @@ namespace RS232_TOOLS_C_Sharp
                 }
 
             //MessageBox.Show("存檔完畢");
+            groupBox1.Enabled = true ;
+            this.ControlBox = true;
             }
 
         private void btnOpenFile_Click(object sender , EventArgs e)
@@ -1235,7 +1366,7 @@ namespace RS232_TOOLS_C_Sharp
      txtREGD0, txtREGD1, txtREGD2, txtREGD3, txtREGD4, txtREGD5, txtREGD6, txtREGD7, txtREGD8, txtREGD9, txtREGDA, txtREGDB, txtREGDC, txtREGDD, txtREGDE, txtREGDF, 
      txtREGE0, txtREGE1, txtREGE2, txtREGE3, txtREGE4, txtREGE5, txtREGE6, txtREGE7, txtREGE8, txtREGE9, txtREGEA, txtREGEB, txtREGEC, txtREGED, txtREGEE, txtREGEF, 
      txtREGF0, txtREGF1, txtREGF2, txtREGF3, txtREGF4, txtREGF5, txtREGF6, txtREGF7, txtREGF8, txtREGF9, txtREGFA, txtREGFB, txtREGFC, txtREGFD, txtREGFE, txtREGFF};
-
+            groupBox1.Enabled = false;
             openFileDialog1.Title = "檔案開啟";
             openFileDialog1.InitialDirectory = System.Windows.Forms.Application.StartupPath  ;
             openFileDialog1.Filter = "文字檔案(*.txt)|*.txt";
@@ -1276,7 +1407,8 @@ namespace RS232_TOOLS_C_Sharp
                 {
                 MessageBox.Show("檔案開啟失敗!");
                 }
-
+            groupBox1.Enabled = true ;
+            this.ControlBox = true;
             }
 
         private void btnREGWriteALL_Click(object sender , EventArgs e)
@@ -1318,7 +1450,7 @@ namespace RS232_TOOLS_C_Sharp
 
             lblGetTime.Text = localDate.AddSeconds(15).ToString("hh:mm:ss");
             REG_ALL_READY(WriteREGALL_Start , WriteREGALL_End , Color.LightBlue  );
-
+            groupBox1.Enabled = false;
             SendCMDtoPort(Commands.CMDW);
             //timer3.Interval = 5000; //dump處理程序預估5秒鐘
             //timer3.Enabled = true;
@@ -1330,9 +1462,67 @@ namespace RS232_TOOLS_C_Sharp
     
 
             }
+        private void REG_ALL_BackColor_Reset()
+            {
+            TextBox[] txtREG = new TextBox[] { 
+     txtREG00, txtREG01, txtREG02, txtREG03, txtREG04, txtREG05, txtREG06, txtREG07, txtREG08, txtREG09, txtREG0A, txtREG0B, txtREG0C, txtREG0D, txtREG0E, txtREG0F,  
+     txtREG10, txtREG11, txtREG12, txtREG13, txtREG14, txtREG15, txtREG16, txtREG17, txtREG18, txtREG19, txtREG1A, txtREG1B, txtREG1C, txtREG1D, txtREG1E, txtREG1F, 
+     txtREG20, txtREG21, txtREG22, txtREG23, txtREG24, txtREG25, txtREG26, txtREG27, txtREG28, txtREG29, txtREG2A, txtREG2B, txtREG2C, txtREG2D, txtREG2E, txtREG2F, 
+     txtREG30, txtREG31, txtREG32, txtREG33, txtREG34, txtREG35, txtREG36, txtREG37, txtREG38, txtREG39, txtREG3A, txtREG3B, txtREG3C, txtREG3D, txtREG3E, txtREG3F, 
+     txtREG40, txtREG41, txtREG42, txtREG43, txtREG44, txtREG45, txtREG46, txtREG47, txtREG48, txtREG49, txtREG4A, txtREG4B, txtREG4C, txtREG4D, txtREG4E, txtREG4F, 
+     txtREG50, txtREG51, txtREG52, txtREG53, txtREG54, txtREG55, txtREG56, txtREG57, txtREG58, txtREG59, txtREG5A, txtREG5B, txtREG5C, txtREG5D, txtREG5E, txtREG5F, 
+     txtREG60, txtREG61, txtREG62, txtREG63, txtREG64, txtREG65, txtREG66, txtREG67, txtREG68, txtREG69, txtREG6A, txtREG6B, txtREG6C, txtREG6D, txtREG6E, txtREG6F, 
+     txtREG70, txtREG71, txtREG72, txtREG73, txtREG74, txtREG75, txtREG76, txtREG77, txtREG78, txtREG79, txtREG7A, txtREG7B, txtREG7C, txtREG7D, txtREG7E, txtREG7F, 
+     txtREG80, txtREG81, txtREG82, txtREG83, txtREG84, txtREG85, txtREG86, txtREG87, txtREG88, txtREG89, txtREG8A, txtREG8B, txtREG8C, txtREG8D, txtREG8E, txtREG8F, 
+     txtREG90, txtREG91, txtREG92, txtREG93, txtREG94, txtREG95, txtREG96, txtREG97, txtREG98, txtREG99, txtREG9A, txtREG9B, txtREG9C, txtREG9D, txtREG9E, txtREG9F, 
+     txtREGA0, txtREGA1, txtREGA2, txtREGA3, txtREGA4, txtREGA5, txtREGA6, txtREGA7, txtREGA8, txtREGA9, txtREGAA, txtREGAB, txtREGAC, txtREGAD, txtREGAE, txtREGAF, 
+     txtREGB0, txtREGB1, txtREGB2, txtREGB3, txtREGB4, txtREGB5, txtREGB6, txtREGB7, txtREGB8, txtREGB9, txtREGBA, txtREGBB, txtREGBC, txtREGBD, txtREGBE, txtREGBF, 
+     txtREGC0, txtREGC1, txtREGC2, txtREGC3, txtREGC4, txtREGC5, txtREGC6, txtREGC7, txtREGC8, txtREGC9, txtREGCA, txtREGCB, txtREGCC, txtREGCD, txtREGCE, txtREGCF, 
+     txtREGD0, txtREGD1, txtREGD2, txtREGD3, txtREGD4, txtREGD5, txtREGD6, txtREGD7, txtREGD8, txtREGD9, txtREGDA, txtREGDB, txtREGDC, txtREGDD, txtREGDE, txtREGDF, 
+     txtREGE0, txtREGE1, txtREGE2, txtREGE3, txtREGE4, txtREGE5, txtREGE6, txtREGE7, txtREGE8, txtREGE9, txtREGEA, txtREGEB, txtREGEC, txtREGED, txtREGEE, txtREGEF, 
+     txtREGF0, txtREGF1, txtREGF2, txtREGF3, txtREGF4, txtREGF5, txtREGF6, txtREGF7, txtREGF8, txtREGF9, txtREGFA, txtREGFB, txtREGFC, txtREGFD, txtREGFE, txtREGFF};
+            groupBox1.Enabled = false;
+            for (int i = 0 ; i <= 255 ; i++)
+                {
+                txtREG[i].BackColor = Color.Empty;
+                //txtREG[i].ForeColor = Color.Empty;
+                }
+            groupBox1.Enabled = true;
+            this.ControlBox = true;
+            }
 
- 
+    
 
-        
+        private void txtI2CAddr2_KeyPress(object sender , KeyPressEventArgs e)
+            {
+            if (e.KeyChar == '\r')
+                {
+                if (txtI2CAddr2.Text == "40")
+                    {
+                    cboChipID.SelectedIndex = 0;
+                    txtI2CAddr.Text = txtI2CAddr2.Text;
+                    }
+                else if (txtI2CAddr2.Text == "88")
+                    {
+                    cboChipID.SelectedIndex = 1;
+                    txtI2CAddr.Text = txtI2CAddr2.Text;
+                    }
+                else if (txtI2CAddr2.Text == "A0")
+                    {
+                    cboChipID.SelectedIndex = 2;
+                    txtI2CAddr.Text = txtI2CAddr2.Text;
+                    }
+                else if (txtI2CAddr2.Text == "12")
+                    {
+                    cboChipID.SelectedIndex = 3;
+                    txtI2CAddr.Text = txtI2CAddr2.Text;
+                    }
+                else
+                    txtI2CAddr2.Text = txtI2CAddr.Text;
+                }
+            }
+
+
+
     }
 }
