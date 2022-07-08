@@ -49,6 +49,11 @@ namespace RS232_TOOLS_C_Sharp
  
     //private Thread rs232ReadThread = null;
 
+    //連續傳送command  to ML076Q
+    bool blnSendCommandFlag = false;
+   
+    DateTime dt1 = DateTime.Now.AddSeconds(3);
+
      //   SerialPort serialPort1 = new SerialPort();
         delegate void SetTextCallback(string text);
 
@@ -299,8 +304,8 @@ namespace RS232_TOOLS_C_Sharp
         }
         private void rtfMessageReset()
             {
-            if (rtfMessage.Text.Length > 2000)
-                rtfMessage.Text = "";
+            //if (rtfMessage.Text.Length > 2000)
+            //    rtfMessage.Text = "";
 
             rtfMessage.SelectionStart = rtfMessage.Text.Length;
             rtfMessage.ScrollToCaret();
@@ -398,7 +403,16 @@ namespace RS232_TOOLS_C_Sharp
                     {
                     chkRepeatCMD.Checked = true;
                     }
-                       // }
+                else if (str.Contains("txtCMDDATA="))
+                    {
+                    txtCMDDATA.Text = str.Substring(str.IndexOf("=") + 1 , (str.Length - 11));
+                    }
+                else if (str.Contains("cboSecond="))
+                    {
+                    cboSecond.SelectedIndex  = Int32.Parse(str.Substring(str.IndexOf("=") + 1 , (str.Length - 10)));
+                    //PRINT("cboSecond=" + str.Substring(str.IndexOf("=") + 1 , (str.Length - 10)));
+                    }
+            
                    
                    
                 }
@@ -460,6 +474,9 @@ namespace RS232_TOOLS_C_Sharp
         if (chkRepeatCMD.Checked == true)
             sw.Write("chkRepeatCMD.Checked=true" + "\r");
 
+        sw.Write("txtCMDDATA=" + txtCMDDATA.Text  + "\r");
+
+        sw.Write("cboSecond=" + cboSecond.SelectedIndex + "\r");
 
         //清空緩衝區
         sw.Flush();
@@ -548,8 +565,8 @@ namespace RS232_TOOLS_C_Sharp
         private void btnPortDisConnect_Click(object sender, EventArgs e)
         {
          
-        DateTime localDate = DateTime.Now;
-
+        DateTime localDate = DateTime.Now;                
+        
         if (CMDR_Action == true)
             {
             Dump_Loop = Dump_End;
@@ -588,7 +605,11 @@ namespace RS232_TOOLS_C_Sharp
         CMDR_Action = false;
         CMDW_Action = false;
 
-         
+        if (blnSendCommandFlag==true )  
+            {
+            blnSendCommandFlag = false;
+            lblGetTime.Text = "_";
+            }
 
             try
             {
@@ -622,6 +643,8 @@ namespace RS232_TOOLS_C_Sharp
 
         private void btnSendCMD_Click(object sender, EventArgs e)
         {
+        DateTime localDate = DateTime.Now;
+
            // serialPort1.Write(txtCMDDATA.Text + " \r" );
         if (btnSendCMD.Text == "停止")
             {
@@ -635,10 +658,13 @@ namespace RS232_TOOLS_C_Sharp
 
             if ((chkRepeatCMD.Checked == true) && (cboSecond.SelectedIndex != 0))
                 {
+                blnSendCommandFlag = true;
                 timer2.Interval = (cboSecond.SelectedIndex * 1000);
                 timer2.Enabled = true;
                 btnSendCMD.Text = "停止";
                 btnSendCMD.BackColor = Color.Red ;
+
+               // lblGetTime.Text = localDate.AddSeconds(cboSecond.SelectedIndex).ToString("hh:mm:ss"); 
                 }
             }
         }
@@ -669,8 +695,18 @@ namespace RS232_TOOLS_C_Sharp
         private void timer1_Tick(object sender , EventArgs e)
             {
             DateTime localDate = DateTime.Now;
+            //int time_check=0;
             lblTimeClock.Text = localDate.ToString();// DateTime.Now.ToString("HH:mm:ss");
             //lblGetTime.Text = localDate.AddSeconds(15).ToString() ; 
+
+            //time_check = dt1.TimeOfDay.CompareTo(localDate.TimeOfDay);
+
+            //if (time_check > 0)
+            //    PRINT("dt1 > now");
+            //else if (time_check == 0)
+            //    PRINT("dt1 = now");
+            //else if (time_check < 0)
+            //    PRINT("dt1 < now");
 
             if (timer2.Enabled == true)
                 {
@@ -695,7 +731,7 @@ namespace RS232_TOOLS_C_Sharp
                 PRINT("blnDisConnect_Flag == true");
                 lblGetTime.Text = "_";
                 }
-            else if (lblGetTime.Text == localDate.AddSeconds(0).ToString("hh:mm:ss"))
+            else if ((blnSendCommandFlag == false ) && (lblGetTime.Text == localDate.AddSeconds(0).ToString("hh:mm:ss")))
                 {
                 if (CMDR_Action == true)
                     {
@@ -714,6 +750,19 @@ namespace RS232_TOOLS_C_Sharp
                     this.ControlBox = true;
                     }
                 lblGetTime.Text = "_";
+                }
+            else if ((blnSendCommandFlag == true) && (lblGetTime.Text == localDate.AddSeconds(0).ToString("hh:mm:ss")))
+                {
+                SendCMDtoPort(Commands.SendCMD);
+                blnSendCommandFlag = false;
+                lblGetTime.Text = "_";
+
+                if (chkRepeatCMD.Checked == true)
+                    {
+                    blnSendCommandFlag = true;
+                    lblGetTime.Text = localDate.AddSeconds(cboSecond.SelectedIndex).ToString("hh:mm:ss"); 
+                    }
+                
                 }
 
             }
@@ -1519,6 +1568,17 @@ namespace RS232_TOOLS_C_Sharp
                     }
                 else
                     txtI2CAddr2.Text = txtI2CAddr.Text;
+                }
+            }
+
+        private void txtCMDDATA_KeyPress(object sender , KeyPressEventArgs e)
+            {
+                if (e.KeyChar == '\r')
+                {
+               
+                txtCMDDATA.Text=txtCMDDATA.Text.ToUpper(); 
+                
+                   SendCMDtoPort(Commands.SendCMD);
                 }
             }
 

@@ -533,6 +533,7 @@
             this.txtCMDDATA.Size = new System.Drawing.Size(142, 29);
             this.txtCMDDATA.TabIndex = 13;
             this.txtCMDDATA.Text = "FW";
+            this.txtCMDDATA.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCMDDATA_KeyPress);
             // 
             // lblI2CID
             // 
@@ -4109,7 +4110,7 @@
             this.txtREGF8.Name = "txtREGF8";
             this.txtREGF8.Size = new System.Drawing.Size(27, 26);
             this.txtREGF8.TabIndex = 0;
-            this.txtREGF8.Text = "FF";
+            this.txtREGF8.Text = "00";
             this.txtREGF8.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREGF8.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4121,7 +4122,7 @@
             this.txtREG78.Name = "txtREG78";
             this.txtREG78.Size = new System.Drawing.Size(27, 26);
             this.txtREG78.TabIndex = 0;
-            this.txtREG78.Text = "FF";
+            this.txtREG78.Text = "00";
             this.txtREG78.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREG78.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4133,7 +4134,7 @@
             this.txtREGB8.Name = "txtREGB8";
             this.txtREGB8.Size = new System.Drawing.Size(27, 26);
             this.txtREGB8.TabIndex = 0;
-            this.txtREGB8.Text = "FF";
+            this.txtREGB8.Text = "00";
             this.txtREGB8.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREGB8.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4145,7 +4146,7 @@
             this.txtREG38.Name = "txtREG38";
             this.txtREG38.Size = new System.Drawing.Size(27, 26);
             this.txtREG38.TabIndex = 0;
-            this.txtREG38.Text = "FF";
+            this.txtREG38.Text = "00";
             this.txtREG38.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREG38.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4157,7 +4158,7 @@
             this.txtREGE8.Name = "txtREGE8";
             this.txtREGE8.Size = new System.Drawing.Size(27, 26);
             this.txtREGE8.TabIndex = 0;
-            this.txtREGE8.Text = "FF";
+            this.txtREGE8.Text = "00";
             this.txtREGE8.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREGE8.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4169,7 +4170,7 @@
             this.txtREG68.Name = "txtREG68";
             this.txtREG68.Size = new System.Drawing.Size(27, 26);
             this.txtREG68.TabIndex = 0;
-            this.txtREG68.Text = "FF";
+            this.txtREG68.Text = "00";
             this.txtREG68.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREG68.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4181,7 +4182,7 @@
             this.txtREGA8.Name = "txtREGA8";
             this.txtREGA8.Size = new System.Drawing.Size(27, 26);
             this.txtREGA8.TabIndex = 0;
-            this.txtREGA8.Text = "FF";
+            this.txtREGA8.Text = "00";
             this.txtREGA8.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREGA8.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4193,7 +4194,7 @@
             this.txtREG28.Name = "txtREG28";
             this.txtREG28.Size = new System.Drawing.Size(27, 26);
             this.txtREG28.TabIndex = 0;
-            this.txtREG28.Text = "FF";
+            this.txtREG28.Text = "00";
             this.txtREG28.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREG28.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4205,7 +4206,7 @@
             this.txtREGD8.Name = "txtREGD8";
             this.txtREGD8.Size = new System.Drawing.Size(27, 26);
             this.txtREGD8.TabIndex = 0;
-            this.txtREGD8.Text = "FF";
+            this.txtREGD8.Text = "00";
             this.txtREGD8.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREGD8.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4217,7 +4218,7 @@
             this.txtREG58.Name = "txtREG58";
             this.txtREG58.Size = new System.Drawing.Size(27, 26);
             this.txtREG58.TabIndex = 0;
-            this.txtREG58.Text = "FF";
+            this.txtREG58.Text = "00";
             this.txtREG58.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREG58.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4229,7 +4230,7 @@
             this.txtREG98.Name = "txtREG98";
             this.txtREG98.Size = new System.Drawing.Size(27, 26);
             this.txtREG98.TabIndex = 0;
-            this.txtREG98.Text = "FF";
+            this.txtREG98.Text = "00";
             this.txtREG98.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREG98.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4241,7 +4242,7 @@
             this.txtREG18.Name = "txtREG18";
             this.txtREG18.Size = new System.Drawing.Size(27, 26);
             this.txtREG18.TabIndex = 0;
-            this.txtREG18.Text = "FF";
+            this.txtREG18.Text = "00";
             this.txtREG18.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREG18.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4253,7 +4254,7 @@
             this.txtREGC8.Name = "txtREGC8";
             this.txtREGC8.Size = new System.Drawing.Size(27, 26);
             this.txtREGC8.TabIndex = 0;
-            this.txtREGC8.Text = "FF";
+            this.txtREGC8.Text = "00";
             this.txtREGC8.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREGC8.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4265,7 +4266,7 @@
             this.txtREG48.Name = "txtREG48";
             this.txtREG48.Size = new System.Drawing.Size(27, 26);
             this.txtREG48.TabIndex = 0;
-            this.txtREG48.Text = "FF";
+            this.txtREG48.Text = "00";
             this.txtREG48.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREG48.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4277,7 +4278,7 @@
             this.txtREG88.Name = "txtREG88";
             this.txtREG88.Size = new System.Drawing.Size(27, 26);
             this.txtREG88.TabIndex = 0;
-            this.txtREG88.Text = "FF";
+            this.txtREG88.Text = "00";
             this.txtREG88.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREG88.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4289,7 +4290,7 @@
             this.txtREG08.Name = "txtREG08";
             this.txtREG08.Size = new System.Drawing.Size(27, 26);
             this.txtREG08.TabIndex = 0;
-            this.txtREG08.Text = "FF";
+            this.txtREG08.Text = "00";
             this.txtREG08.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREG08.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4301,7 +4302,7 @@
             this.txtREGF0.Name = "txtREGF0";
             this.txtREGF0.Size = new System.Drawing.Size(27, 26);
             this.txtREGF0.TabIndex = 0;
-            this.txtREGF0.Text = "FF";
+            this.txtREGF0.Text = "00";
             this.txtREGF0.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREGF0.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4313,7 +4314,7 @@
             this.txtREG70.Name = "txtREG70";
             this.txtREG70.Size = new System.Drawing.Size(27, 26);
             this.txtREG70.TabIndex = 0;
-            this.txtREG70.Text = "FF";
+            this.txtREG70.Text = "00";
             this.txtREG70.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREG70.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4325,7 +4326,7 @@
             this.txtREGB0.Name = "txtREGB0";
             this.txtREGB0.Size = new System.Drawing.Size(27, 26);
             this.txtREGB0.TabIndex = 0;
-            this.txtREGB0.Text = "FF";
+            this.txtREGB0.Text = "00";
             this.txtREGB0.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREGB0.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4337,7 +4338,7 @@
             this.txtREG30.Name = "txtREG30";
             this.txtREG30.Size = new System.Drawing.Size(27, 26);
             this.txtREG30.TabIndex = 0;
-            this.txtREG30.Text = "FF";
+            this.txtREG30.Text = "00";
             this.txtREG30.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREG30.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4349,7 +4350,7 @@
             this.txtREGE0.Name = "txtREGE0";
             this.txtREGE0.Size = new System.Drawing.Size(27, 26);
             this.txtREGE0.TabIndex = 0;
-            this.txtREGE0.Text = "FF";
+            this.txtREGE0.Text = "00";
             this.txtREGE0.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREGE0.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4361,7 +4362,7 @@
             this.txtREG60.Name = "txtREG60";
             this.txtREG60.Size = new System.Drawing.Size(27, 26);
             this.txtREG60.TabIndex = 0;
-            this.txtREG60.Text = "FF";
+            this.txtREG60.Text = "00";
             this.txtREG60.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREG60.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4373,7 +4374,7 @@
             this.txtREGA0.Name = "txtREGA0";
             this.txtREGA0.Size = new System.Drawing.Size(27, 26);
             this.txtREGA0.TabIndex = 0;
-            this.txtREGA0.Text = "FF";
+            this.txtREGA0.Text = "00";
             this.txtREGA0.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREGA0.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4385,7 +4386,7 @@
             this.txtREG20.Name = "txtREG20";
             this.txtREG20.Size = new System.Drawing.Size(27, 26);
             this.txtREG20.TabIndex = 0;
-            this.txtREG20.Text = "FF";
+            this.txtREG20.Text = "00";
             this.txtREG20.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREG20.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4397,7 +4398,7 @@
             this.txtREGD0.Name = "txtREGD0";
             this.txtREGD0.Size = new System.Drawing.Size(27, 26);
             this.txtREGD0.TabIndex = 0;
-            this.txtREGD0.Text = "FF";
+            this.txtREGD0.Text = "00";
             this.txtREGD0.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREGD0.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4409,7 +4410,7 @@
             this.txtREG50.Name = "txtREG50";
             this.txtREG50.Size = new System.Drawing.Size(27, 26);
             this.txtREG50.TabIndex = 0;
-            this.txtREG50.Text = "FF";
+            this.txtREG50.Text = "00";
             this.txtREG50.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREG50.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4421,7 +4422,7 @@
             this.txtREG90.Name = "txtREG90";
             this.txtREG90.Size = new System.Drawing.Size(27, 26);
             this.txtREG90.TabIndex = 0;
-            this.txtREG90.Text = "FF";
+            this.txtREG90.Text = "00";
             this.txtREG90.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREG90.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4433,7 +4434,7 @@
             this.txtREG10.Name = "txtREG10";
             this.txtREG10.Size = new System.Drawing.Size(27, 26);
             this.txtREG10.TabIndex = 0;
-            this.txtREG10.Text = "FF";
+            this.txtREG10.Text = "00";
             this.txtREG10.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREG10.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4445,7 +4446,7 @@
             this.txtREGC0.Name = "txtREGC0";
             this.txtREGC0.Size = new System.Drawing.Size(27, 26);
             this.txtREGC0.TabIndex = 0;
-            this.txtREGC0.Text = "FF";
+            this.txtREGC0.Text = "00";
             this.txtREGC0.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREGC0.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4457,7 +4458,7 @@
             this.txtREG40.Name = "txtREG40";
             this.txtREG40.Size = new System.Drawing.Size(27, 26);
             this.txtREG40.TabIndex = 0;
-            this.txtREG40.Text = "FF";
+            this.txtREG40.Text = "00";
             this.txtREG40.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREG40.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4469,7 +4470,7 @@
             this.txtREG80.Name = "txtREG80";
             this.txtREG80.Size = new System.Drawing.Size(27, 26);
             this.txtREG80.TabIndex = 0;
-            this.txtREG80.Text = "FF";
+            this.txtREG80.Text = "00";
             this.txtREG80.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREG80.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
@@ -4481,7 +4482,7 @@
             this.txtREG00.Name = "txtREG00";
             this.txtREG00.Size = new System.Drawing.Size(27, 26);
             this.txtREG00.TabIndex = 0;
-            this.txtREG00.Text = "FF";
+            this.txtREG00.Text = "00";
             this.txtREG00.MouseLeave += new System.EventHandler(this.txtREG00_MouseLeave);
             this.txtREG00.MouseHover += new System.EventHandler(this.txtREG00_MouseHover);
             // 
